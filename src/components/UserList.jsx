@@ -1,6 +1,6 @@
 import UserCard from './UserCard';
 
-const UserList = ({ users, handleDeleteUser, handleClickEdit }) => {
+const UserList = ({ users, handleDeleteUser, handleClickEdit, loadUsersToForm }) => {
   return (
     <section>
       {users.map((user) => (
@@ -9,6 +9,7 @@ const UserList = ({ users, handleDeleteUser, handleClickEdit }) => {
           user={user}
           handleDeleteUser={handleDeleteUser}
           handleClickEdit={handleClickEdit}
+          loadUsersToForm={loadUsersToForm}
         />
       ))}
     </section>

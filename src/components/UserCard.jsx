@@ -1,4 +1,4 @@
-const UserCard = ({ user, handleDeleteUser, handleClickEdit }) => {
+const UserCard = ({ user, handleDeleteUser, handleClickEdit, loadUsersToForm }) => {
   return (
     <article>
       <h2>
@@ -18,7 +18,7 @@ const UserCard = ({ user, handleDeleteUser, handleClickEdit }) => {
             <i className="bx bx-trash" onClick={() => handleDeleteUser(user.id)}></i>
           </button>
           <button className="bg-yellow-500 pr-2 pl-2 rounded-md text-white">
-            <i className="bx bxs-edit" onClick={handleClickEdit}></i>
+            <i className="bx bxs-edit" onClick={() => loadUsersToForm(user)}></i>
           </button>
         </div>
       </ul>

@@ -1,4 +1,13 @@
-const UsersForm = ({ handleSubmit, editing, handleCancelClickEdit }) => {
+const UsersForm = ({
+  handleSubmit,
+  editing,
+  handleCancelClickEdit,
+  name,
+  lastName,
+  email,
+  password,
+  birthday,
+}) => {
   return (
     <form className="text-white" onSubmit={handleSubmit}>
       <h2 className="font-bold text-3xl mb-2">{editing ? 'Edit User' : 'New User'}</h2>
@@ -6,6 +15,7 @@ const UsersForm = ({ handleSubmit, editing, handleCancelClickEdit }) => {
         <div className="flex flex-col">
           <label htmlFor="name">First Name: </label>
           <input
+            value={name}
             className="text-black pr-1 pl-1 rounded-md mt-1 w-60"
             id="name"
             name="name"
@@ -15,6 +25,7 @@ const UsersForm = ({ handleSubmit, editing, handleCancelClickEdit }) => {
         <div className="flex flex-col">
           <label htmlFor="lastName">Last Name: </label>
           <input
+            value={lastName}
             className="text-black pr-1 pl-1 rounded-md mt-1"
             id="lastName"
             name="lastName"
@@ -24,6 +35,7 @@ const UsersForm = ({ handleSubmit, editing, handleCancelClickEdit }) => {
         <div className="flex flex-col">
           <label htmlFor="email">Email: </label>
           <input
+            value={email}
             className="text-black pr-1 pl-1 rounded-md mt-1"
             name="email"
             id="email"
@@ -33,6 +45,7 @@ const UsersForm = ({ handleSubmit, editing, handleCancelClickEdit }) => {
         <div className="flex flex-col">
           <label htmlFor="password">Password: </label>
           <input
+            value={password}
             className="text-black pr-1 pl-1 rounded-md mt-1"
             id="password"
             name="password"
@@ -42,6 +55,7 @@ const UsersForm = ({ handleSubmit, editing, handleCancelClickEdit }) => {
         <div className="flex flex-col">
           <label htmlFor="birthday">Birthday: </label>
           <input
+            value={birthday}
             className="text-black pr-1 pl-1 rounded-md mt-1"
             id="birthday"
             name="birthday"

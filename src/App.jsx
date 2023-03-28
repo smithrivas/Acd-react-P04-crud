@@ -1,56 +1,32 @@
 import React from 'react';
-import axios from 'axios';
-// import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import UserList from './components/UserList';
 import Navbar from './components/Navbar';
 import Modal from './components/Modal';
 import UsersForm from './components/UsersForm';
 
-const BASE_URL = 'https://users-crud.academlo.tech/';
+// Funciones de CRUD
+import { getUsers, createUser, deleteUser, updateUser } from './services';
 
 const App = () => {
   const [users, setUsers] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editing, setEditing] = useState(false);
-  // const { register, handleSubmit, reset } = useForm();
 
-  // Obtiene los datos de la Api
-  const getUsers = async () => {
-    try {
-      const res = await axios.get(BASE_URL + 'users/');
-      // console.log(res.data);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // Elementos del objeto
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [birthday, setBirthday] = useState('');
 
-  // Inserta nuevos datos en la Api
-  const createUser = async (userData) => {
-    try {
-      await axios.post(BASE_URL + 'users/', userData);
-      // console.log(res.data);
-      // console.log('Todo OK');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // Elimina datos de la Api
-  const deleteMovie = async (userId) => {
-    try {
-      await axios.delete(`${BASE_URL}/users/${userId}/`);
-      // console.log('Registro eliminado');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // Hook para guardar referencia al DOM
+  // const formRef = useRef(reference);
 
   // Manejador del delete
   const handleDeleteUser = async (userId) => {
     // Elimina el registro
-    await deleteMovie(userId);
+    await deleteUser(userId);
     // Se actualizan los datos en el front
     await loadUsers();
   };
@@ -67,13 +43,19 @@ const App = () => {
 
   // Setea el estado para que aparezca o desaparezca el modal
   const handleClick = () => {
+    setName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setBirthday('');
+
     setIsFormVisible(true);
   };
 
   // Setea el estado para que aparezca o desaparezca el modal
-  const handleClickEdit = () => {
+  const handleClickEdit = (id) => {
     setIsFormVisible(true);
-    setEditing(true);
+    setEditing(id);
   };
 
   const handleCancelClickEdit = () => {
@@ -94,12 +76,31 @@ const App = () => {
       password: form.password.value,
       birthday: form.birthday.value,
     };
-    // form.reset();
+
+    editing && (await updateUser(data, editing));
+    !editing && (await createUser(data));
+
     // Inserta el objeto
-    await createUser(data);
+    // await createUser(data);
     // Se actualiza el nuevo registro
     await loadUsers();
     setIsFormVisible(false);
+    form.reset();
+  };
+
+  // Carga los datos de editar en el form
+  const loadUsersToForm = (userData) => {
+    handleClickEdit(userData.id);
+    // Con $ se refiere a que es una referencia en el DOM
+    // const $form = formRef.current;
+    // $form.name.value = userData.name;
+    console.log(userData);
+
+    setName(userData.first_name);
+    setLastName(userData.last_name);
+    setEmail(userData.email);
+    setPassword(userData.password);
+    setBirthday(userData.birthday);
   };
 
   useEffect(() => {
@@ -113,12 +114,18 @@ const App = () => {
         users={users}
         handleDeleteUser={handleDeleteUser}
         handleClickEdit={handleClickEdit}
+        loadUsersToForm={loadUsersToForm}
       />
       <Modal isVisible={isFormVisible}>
         <UsersForm
           handleSubmit={handleSubmit}
           editing={editing}
           handleCancelClickEdit={handleCancelClickEdit}
+          name={name}
+          lastName={lastName}
+          email={email}
+          password={password}
+          birthday={birthday}
         />
       </Modal>
     </div>
