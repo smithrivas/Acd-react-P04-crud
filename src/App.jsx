@@ -4,6 +4,8 @@ import UserList from './components/UserList';
 import Navbar from './components/Navbar';
 import Modal from './components/Modal';
 import UsersForm from './components/UsersForm';
+import Footer from './components/Footer';
+import Alert from './components/Alert';
 
 // Funciones de CRUD
 import { getUsers, createUser, deleteUser, updateUser } from './services';
@@ -12,6 +14,8 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageSuccess, setMessageSuccess] = useState('');
 
   // Elementos del objeto
   const [name, setName] = useState('');
@@ -19,9 +23,6 @@ const App = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [birthday, setBirthday] = useState('');
-
-  // Hook para guardar referencia al DOM
-  // const formRef = useRef(reference);
 
   // Manejador del delete
   const handleDeleteUser = async (userId) => {
@@ -77,11 +78,31 @@ const App = () => {
       birthday: form.birthday.value,
     };
 
+    if (
+      [
+        data.first_name,
+        data.last_name,
+        data.email,
+        data.password,
+        data.birthday,
+      ].includes('')
+    ) {
+      setMessage('Todos los campos son obligatorios');
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+      return;
+    }
+
+    // Inserta el objeto
     editing && (await updateUser(data, editing));
     !editing && (await createUser(data));
 
-    // Inserta el objeto
-    // await createUser(data);
+    setMessageSuccess('Usuario creado correctamente');
+    setTimeout(() => {
+      setMessageSuccess('');
+    }, 3000);
+
     // Se actualiza el nuevo registro
     await loadUsers();
     setIsFormVisible(false);
@@ -91,10 +112,6 @@ const App = () => {
   // Carga los datos de editar en el form
   const loadUsersToForm = (userData) => {
     handleClickEdit(userData.id);
-    // Con $ se refiere a que es una referencia en el DOM
-    // const $form = formRef.current;
-    // $form.name.value = userData.name;
-    console.log(userData);
 
     setName(userData.first_name);
     setLastName(userData.last_name);
@@ -108,8 +125,9 @@ const App = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col items-center p-4 text-black">
+    <div className="h-screen flex flex-col pt-8 pr-8 pb-0 pl-8 text-black">
       <Navbar actionAddBtn={handleClick} />
+      {messageSuccess && <Alert type={'success'}>{messageSuccess}</Alert>}
       <UserList
         users={users}
         handleDeleteUser={handleDeleteUser}
@@ -126,8 +144,15 @@ const App = () => {
           email={email}
           password={password}
           birthday={birthday}
+          setName={setName}
+          setLastName={setLastName}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          setBirthday={setBirthday}
+          message={message}
         />
       </Modal>
+      <Footer />
     </div>
   );
 };
