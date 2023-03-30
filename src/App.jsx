@@ -89,7 +89,7 @@ const App = () => {
         data.birthday,
       ].includes('')
     ) {
-      setMessage('Todos los campos son obligatorios');
+      setMessage('All fields are required');
       setTimeout(() => {
         setMessage('');
       }, 3000);
@@ -100,7 +100,7 @@ const App = () => {
     editing && (await updateUser(data, editing));
     !editing && (await createUser(data));
 
-    setMessageSuccess('Usuario creado correctamente');
+    setMessageSuccess('registration was successful');
     setTimeout(() => {
       setMessageSuccess('');
     }, 3000);

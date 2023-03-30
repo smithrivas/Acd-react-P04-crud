@@ -1,5 +1,4 @@
 const Alert = ({ children, type }) => {
-  console.log(type);
   return (
     <>
       {type === 'success' ? (
