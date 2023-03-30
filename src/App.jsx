@@ -26,10 +26,12 @@ const App = () => {
 
   // Manejador del delete
   const handleDeleteUser = async (userId) => {
-    // Elimina el registro
-    await deleteUser(userId);
-    // Se actualizan los datos en el front
-    await loadUsers();
+    if (window.confirm('¿Desea eliminar el usuario?')) {
+      // Elimina el registro
+      await deleteUser(userId);
+      // Se actualizan los datos en el front
+      await loadUsers();
+    }
   };
 
   // Carga los datos en la página
